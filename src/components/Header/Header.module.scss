@@ -1,0 +1,48 @@
+@import '../../assets/styles/colors.scss';
+
+.header{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  background: white;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid $border;
+}
+
+
+nav {
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  background: grey;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+}
+
+
+.burgerBtn{
+  width: 30px;
+  height: 15px;
+  margin-left: 20px;
+  position: relative;
+  cursor: pointer;
+  &:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 25px;
+    background-color: black;
+    height: 2px;
+  }
+  &:after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 25px;
+    background-color: black;
+    height: 2px;
+  }
+}
+

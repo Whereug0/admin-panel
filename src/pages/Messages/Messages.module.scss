@@ -1,0 +1,50 @@
+@import '../../assets/styles/colors.scss';
+
+.container{
+  padding: 100px;
+}
+
+.content_wrapp{
+  background-color: white;
+  padding: 50px;
+  border: 1px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  .message__wrapp{
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.message{
+  width: 600px;
+  border: 1px solid $border;
+  padding: 10px 20px;
+}
+
+.icon{
+  color: $icon-color;
+  width: 20px;
+  height: 20px;
+}
+.search__addBtn{
+  display: flex;
+  gap: 50px;
+}
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.button{
+  padding: 10px;
+  background: #637fd9;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  border: none;
+}

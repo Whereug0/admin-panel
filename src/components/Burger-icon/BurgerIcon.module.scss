@@ -1,0 +1,64 @@
+@import '../../assets/styles/colors.scss';
+
+
+.burger-mobile-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 40px;
+  height: 50px;
+  background-color: $background__menu;
+  cursor: pointer;
+  &::before {
+    content: "";
+    display: block;
+    transform: translateY(-4px) rotate(0);
+    top: 17px;
+    width: 20px;
+    height: 1px;
+    background-color: #fff;
+    transition: transform 0.2s ease;
+  }
+  &::after {
+    content: "";
+    display: block;
+    transform: translateY(5px) rotate(0);
+    width: 20px;
+    height: 1px;
+    background-color: #fff;
+    transition: transform 0.2s ease;
+  }
+  &:hover {
+    background-color: $background-active__menu;
+  }
+  &__active {
+    &::before {
+      transform: rotate(45deg) translateX(1px);
+      transition: transform 0.2s ease;
+    }
+    &::after {
+      transform: rotate(-45deg);
+      transition: transform 0.2s ease;
+    }
+  }
+  &.burger-mobile-wrap-light {
+    &::before {
+      background-color: #000;
+    }
+    &::after {
+      background-color: #000;
+    }
+    &:hover {
+      background-color: #e1e1e1;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .burger-mobile-wrap {
+    display: flex;
+    height: 100%;
+  }
+}
+

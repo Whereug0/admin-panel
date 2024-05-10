@@ -1,0 +1,82 @@
+@import '../../assets/styles/colors.scss';
+
+.nav-menu {
+  position: absolute;
+  height: 100vh;
+  z-index: -1;
+  background-color: $background__menu;
+  padding-top: 30px;
+  top: 0;
+  left: 0;
+  transform: translateX(-100vh);
+  opacity: 0;
+  transition: 0.4s ease;
+  width: 300px;
+  &__list {
+    list-style-type: none;
+    width: 100%;
+    padding: 0 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .pages{
+      display: flex;
+      gap: 20px;
+      flex-direction: column;
+    }
+  }
+  &__item {    
+    display: flex;
+    align-items: center;
+
+  }
+  &__link {
+    width: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    height: 20px;
+    padding: 30px 20px;
+    &:hover {
+      background-color: $background-active__menu;
+    }
+  }
+  &__text {
+    font-size: 17px;
+    letter-spacing: 1px;
+  }
+  &.nav-menu-active {
+    cursor: default;
+    transform: translateY(0);
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+.logoutBtn{
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: $text-menu;
+  font-size: 18px;
+  background-color: $background-active__menu;
+  border: none;
+}
+
+
+@media (max-width: 768px) {
+  .nav-menu{
+    &.nav-menu-active{
+      width: 100%;
+    }
+  }
+}

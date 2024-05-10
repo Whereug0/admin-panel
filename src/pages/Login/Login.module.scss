@@ -1,0 +1,78 @@
+@import '../../assets/styles/colors.scss';
+
+.Login {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #1e1e1e;;
+}
+
+.Form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  border: 1px solid rgb(66, 65, 65);
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0px 5px 10px 2px rgba(171, 105, 0, 0.2);
+}
+
+
+.Input {
+  font-size: 15px;
+  border: 1px solid rgb(66, 65, 65);
+  border-radius: 10px;
+  padding: 10px;
+  background: transparent;
+  color: white;
+  outline: none;
+  &::placeholder {
+    color: rgb(66, 65, 65);
+  }
+  ::placeholder {
+    color: rgb(66, 65, 65);
+  }
+  &:hover{
+    background: transparent;
+
+  }
+  &:focus{
+    background: transparent;
+  }
+  svg{
+    color: white;
+  }
+}
+
+
+
+.fomrItem {
+  width: 100%;
+  background: transparent;
+  color: white;
+  &:hover{
+    background: transparent;
+
+  }
+  &:focus{
+    background: transparent;
+  }
+}
+
+.loginBtn{
+  padding: 10px;
+  border: 1px solid rgb(66, 65, 65);
+  background: transparent;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.errmsg {
+  color: red;
+}
