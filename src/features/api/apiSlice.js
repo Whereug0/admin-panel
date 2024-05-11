@@ -6,7 +6,7 @@ import { BASE_URL } from "../../utils/constants";
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   credentials: 'include',
-  tagTypes: ['Messages'],
+  tagTypes: ['Messages', 'Holidays', 'Documents', 'Users'],
   prepareHeaders: (headers, {getState}) => {
     const token = getState().auth.token
     const accessToken = localStorage.getItem('accessToken');
@@ -52,47 +52,35 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getMessage: builder.query({
-      query: () => "/main/message/", // Путь к эндпоинту для получения сообщений
-      providesTags: result => ['Messages']
-    }),
-    createMessage: builder.mutation({
-      query: (body) => ({
-        url: '/main/message/',
-        method: 'POST',
-        body,
-      }),
-      invalidatesTags: ['Messages']
-    }),
-    updateMessage: builder.mutation({
-      query: (message) => ({
-        url: `/main/message/${message.id}/`,
-        method: 'PUT',
-        body: message,
-      }),
-      invalidatesTags: ['Messages']
-    }),
-    deleteMessage: builder.mutation({
-      query: (message) => ({
-        url: `/main/message/${message.id}/`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['Messages']
-    })
+    // getMessage: builder.query({
+    //   query: () => "/main/message/", // Путь к эндпоинту для получения сообщений
+    //   providesTags: result => ['Messages']
+    // }),
+    // createMessage: builder.mutation({
+    //   query: (body) => ({
+    //     url: '/main/message/',
+    //     method: 'POST',
+    //     body,
+    //   }),
+    //   invalidatesTags: ['Messages']
+    // }),
+    // updateMessage: builder.mutation({
+    //   query: (message) => ({
+    //     url: `/main/message/${message.id}/`,
+    //     method: 'PUT',
+    //     body: message,
+    //   }),
+    //   invalidatesTags: ['Messages']
+    // }),
+    // deleteMessage: builder.mutation({
+    //   query: (message) => ({
+    //     url: `/main/message/${message.id}/`,
+    //     method: 'DELETE',
+    //   }),
+    //   invalidatesTags: ['Messages']
+    // })
   })
 })
-// export const apiSlice = createApi({
-//   baseQuery: baseQueryWithReauth,
-//   endpoints: (builder) => ({
-//     getMessage: builder.query({
-//       query: (type, message) => ({
-//         url: '/main/message/',
-//         method: 'POST',
-//         body: {type, message}
-//       }), // Путь к эндпоинту для получения сообщений
-//     }),
-//   }),
-// })
 
 
 export const { 

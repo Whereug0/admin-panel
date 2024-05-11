@@ -8,7 +8,7 @@ const Users = () => {
       <Header />
       <div className={styles.container}>
         <div className={styles.content}>
-          <h1>Сотрудники</h1>      
+          <h1>Пользователи</h1>      
         </div>
       </div>
     </>

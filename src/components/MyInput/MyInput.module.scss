@@ -6,13 +6,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 35px;
+  height: 30px;
 
   .input__box {
     gap: 10px;
     border: 1px solid $border;
     border-radius: 15px;
-    padding: 10px;
+    padding: 5px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,9 +23,19 @@
     }
   }
   .input{
+    background: transparent;
     border: none;
     outline: none;
     font-size: 14px;
     width: 250px;
   }
+}
+
+@media (max-width: 450px) {
+  .input__wrapp {
+    .input__box {
+      width: 250px;
+    }
+  }
+
 }

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { apiSlice, useCreateMessageMutation, useDeleteMessageMutation, useGetMessageQuery, useUpdateMessageMutation } from '../../features/api/apiSlice';
+import {apiSlice} from '../../features/api/apiSlice';
+import { useCreateMessageMutation, useDeleteMessageMutation, useGetMessageQuery, useUpdateMessageMutation } from '../../features/messages/messagesApiSlice';
 import styles from './Messages.module.scss';
 import Header from '../../components/Header/Header';
 import MyInput from '../../components/MyInput/MyInput';
@@ -67,9 +68,27 @@ const Messages = () => {
             </button>
           </div>
           {message && message.map((message) => (
-            <div className={styles.content}>
+            <div className={styles.content} key={message.id}>
               <div className={styles.message__wrapp}>
-                <p className={styles.message} key={message.id}>{message.message}</p>     
+                <div className={styles.message}>
+                  <textarea className={styles.message__text}>
+                    {message.message}
+                  </textarea>
+                  <div className={styles.media_wrapp}>
+                  {message.media.map((mediaItem, index) => (
+                    mediaItem.media.endsWith('.jpg') ? (
+                      <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} key={index} />
+                    ) : (
+                      mediaItem.media.endsWith('.MP4') && (
+                        <video controls width="250" key={index}>
+                          <source src={mediaItem.media} type="video/mp4" />
+                          Ваш браузер не поддерживает видео.
+                        </video>
+                      )
+                    )
+                  ))}
+                  </div>
+                </div>
                 <div className={styles.buttons}>
                   <button className={styles['button']} onClick={() => handleRemove(message.id)}>
                     Удалить

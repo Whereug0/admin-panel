@@ -4,7 +4,7 @@ import { ROUTES } from '../../utils/routes';
 import Holidays from '../../pages/Holidays/Holidays';
 import Users from '../../pages/Users/Users';
 import Messages from '../../pages/Messages/Messages';
-import References from '../../pages/References/References';
+import Documents from '../../pages/Documents/Documents';
 import Login from '../../pages/Login/Login';
 
 const AppRoutes = () => {
@@ -14,7 +14,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.MESSAGES} element={<Messages />}/>
           <Route path={ROUTES.HOLIDAYS} element={<Holidays />}/>
           <Route path={ROUTES.USERS} element={<Users />}/>
-          <Route path={ROUTES.REFERENCES} element={<References />}/>
+          <Route path={ROUTES.DOCUMENTS} element={<Documents />}/>
         </Routes>
   )
 }

@@ -20,9 +20,20 @@
 }
 
 .message{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 600px;
   border: 1px solid $border;
   padding: 10px 20px;
+  box-shadow: $beeline-color-boxshadow;
+  .message__text{
+    padding: 20px;
+    font-size: 15px;
+    height: 200px;
+    border: 1px solid $border;
+    border-radius: 15px;
+  }
 }
 
 .icon{
@@ -42,9 +53,14 @@
 }
 .button{
   padding: 10px;
-  background: #637fd9;
+  background: $background__menu;
   border-radius: 5px;
   cursor: pointer;
   color: white;
   border: none;
+}
+
+.img {
+  width: 300px;
+  height: 300px;
 }

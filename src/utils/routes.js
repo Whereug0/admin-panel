@@ -1,7 +1,7 @@
 export const ROUTES = {
   LOGIN: '/',
   MESSAGES: '/messages',
-  REFERENCES: '/references',
+  DOCUMENTS: '/documents',
   HOLIDAYS: '/holidays',
   USERS: '/users',
 }

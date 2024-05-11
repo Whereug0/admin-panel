@@ -63,7 +63,7 @@ const Login = () => {
 
 
 
-  return isLoading ?<h1>Loadin...</h1> : (
+  return isLoading ?<h1>Loading...</h1> : (
     <div className={styles.Login}>
       <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
       <form className={styles.Form} onSubmit={handleSubmit}>

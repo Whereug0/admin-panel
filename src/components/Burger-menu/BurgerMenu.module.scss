@@ -32,6 +32,7 @@
 
   }
   &__link {
+    gap: 15px;
     width: 100%;
     color: white;
     display: flex;
@@ -70,6 +71,20 @@
   font-size: 18px;
   background-color: $background-active__menu;
   border: none;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  color: $icon-color;
+  fill: $icon-color;
+  stroke: $icon-color;
+  rect{
+    stroke: none;
+  }
+  line{
+    stroke: $icon-color;
+  }
 }
 
 
