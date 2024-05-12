@@ -8,24 +8,25 @@ import MyInput from '../../components/MyInput/MyInput';
 import Modal from '../../components/Modal/Modal';
 
 const Messages = () => {
-  const [modalActive, setModalActive] = useState(false)
+  const [modalActive, setModalActive] = useState(false);
+  const [editMessageId, setEditMessageId] = useState(null);
   const [selectedMessageType, setSelectedMessageType] = useState('');
   const [messageText, setMessageText] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
 
-
-  const dispatch = useDispatch()
-  const {data: message, isLoading, error} = useGetMessageQuery()
-  const [createMessage, {}]  = useCreateMessageMutation()
-  const [updateMessage, {}] = useUpdateMessageMutation()
-  const [deleteMessage, {}] = useDeleteMessageMutation()
+  const dispatch = useDispatch();
+  const { data: messages, isLoading, error } = useGetMessageQuery();
+  const [createMessage, {}] = useCreateMessageMutation();
+  const [updateMessage, {}] = useUpdateMessageMutation();
+  const [deleteMessage, {}] = useDeleteMessageMutation();
 
   useEffect(() => {
-    dispatch(apiSlice.endpoints.getMessage.initiate())
-  },[dispatch])
+    dispatch(apiSlice.endpoints.getMessage.initiate());
+  }, [dispatch]);
 
-  const handleCreate = async (e) => {
+  const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("type", selectedMessageType);
@@ -34,72 +35,44 @@ const Messages = () => {
     selectedFiles.forEach(file => {
       formData.append("media", file);
     });
+
     try {
-      // const messageData = { type: selectedMessageType, message: messageText };
-      // if (selectedFiles.length > 0) {
-      //   // Обработка выбранных файлов, например, загрузка на сервер
-      //   // Передача информации о файлах в запрос на создание сообщения
-      //   messageData.media = selectedFiles.map(file => ({media: [file]} ));
-      // }
-      const result = await createMessage(formData); 
-      // Очистка состояний после успешного создания сообщения 
+      if (isEditing) {
+        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText });
+      } else {
+        await createMessage(formData);
+      }
+      // Очистка состояний после успешного создания/обновления сообщения
       setSelectedFiles([]);
-      setSuccessMessage("Сообщение успешно создано!")
-      setMessageText(''); // Очистка textarea
-      setSelectedMessageType(''); // Сброс выбранного значения в селекте
+      setSuccessMessage(isEditing ? "Сообщение успешно обновлено!" : "Сообщение успешно создано!");
+      setMessageText('');
+      setIsEditing(false);
       setTimeout(() => {
         setModalActive(false);
         setSuccessMessage('');
       }, 1000);
     } catch (error) {
-      console.error("Ошибка при создании сообщения:", error);
+      console.error("Ошибка при создании/обновлении сообщения:", error);
       console.log("Дополнительная информация об ошибке:", error.response.data);
     }
-  }
+  };
 
-  useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => {
-        setModalActive(false);
-        setSuccessMessage('');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
+  // Функция для открытия модального окна для редактирования сообщения
+  const handleEdit = (message) => {
+    setEditMessageId(message.id);
+    setSelectedMessageType(message.type);
+    setMessageText(message.message);
+    setSelectedFiles(message.media.map(mediaItem => mediaItem.media));
+    setIsEditing(true);
+    setModalActive(true);
+  };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error:{error.message}</div>;
-  }
-  console.log(message)
-
-
-
-
-
-
-  const handleRemove = (message) => {
+  const handleRemove = (messageId) => {
     const result = window.confirm('Вы точно хотите удалить сообщение?');
-    if(result) {
-      deleteMessage({id: message})
-    }else {
+    if (result) {
+      deleteMessage({ id: messageId });
     }
-  }
-
-  const handleUpdate = (message) => {
-    const messageType = prompt("Введите тип сообщения:");
-    const messageText = prompt("Введите сообщение")
-    updateMessage({id: message, type: messageType, message: messageText,})
-  }
-
-  const handleFileChange = (files) => {
-    // Сохранить выбранные файлы в состоянии компонента
-    setSelectedFiles(Array.from(files));;
-  }
- 
+  };
 
   return (
     <>
@@ -113,44 +86,52 @@ const Messages = () => {
               Добавить
             </button>
           </div>
-          {message && message.map((message) => (
-            <div className={styles.content} key={message.id}>
-              <div className={styles.message__wrapp}>
-                <div className={styles.message}>
-                  <p>
-                    {message.message}
-                  </p>
-                  <div className={styles.media_wrapp}>
-                  {message.media.map((mediaItem, index) => (
-                    mediaItem.media.endsWith('.jpg') ? (
-                      <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} key={index} />
-                    ) : (
-                      mediaItem.media.endsWith('.mp4') && (
-                        <video controls width="250" key={index}>
-                          <source src={mediaItem.media} type="video/mp4" />
-                        </video>
-                      )                   
-                    )
-                  ))}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>Error: {error.message}</div>
+          ) : (
+            messages && messages.map((message) => (
+              <div className={styles.content} key={message.id}>
+                <div className={styles.message__wrapp}>
+                  <div className={styles.message}>
+                    <p>{message.message}</p>
+                    <div className={styles.media_wrapp}>
+                    {message.media.map((mediaItem, index) => (
+                      <div key={index}>
+                        {mediaItem.media.endsWith('.jpg') || mediaItem.media.endsWith('.jpeg') ? (
+                          <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} />
+                        ) : mediaItem.media.endsWith('.svg') || mediaItem.media.endsWith('.pdf') || mediaItem.media.endsWith('.eps') || mediaItem.media.endsWith('.ai') || mediaItem.media.endsWith('.cdr') ? (
+                          <div>Векторное изображение: {mediaItem.media}</div>
+                        ) : mediaItem.media.endsWith('.png') || mediaItem.media.endsWith('.gif') || mediaItem.media.endsWith('.raw') || mediaItem.media.endsWith('.tiff') || mediaItem.media.endsWith('.bmp') || mediaItem.media.endsWith('.psd') ? (
+                          <div>Растровое изображение: {mediaItem.media}</div>
+                        ) : mediaItem.media.endsWith('.mp4') || mediaItem.media.endsWith('.MP4') || mediaItem.media.endsWith('.avi') || mediaItem.media.endsWith('.mov') || mediaItem.media.endsWith('.wmv') || mediaItem.media.endsWith('.mkv') ? (
+                          <video controls width="250" key={index}>
+                            <source src={mediaItem.media} type="video/mp4" />
+                          </video>
+                        ) : (
+                          <div>{mediaItem.media}</div>
+                        )}
+                      </div>
+                    ))}
+                    </div>
+                  </div>
+                  <div className={styles.buttons}>
+                    <button className={styles['button']} onClick={() => handleRemove(message.id)}>
+                      Удалить
+                    </button>
+                    <button className={styles['button']} onClick={() => handleEdit(message)}>
+                      Редактировать
+                    </button>
                   </div>
                 </div>
-                <div className={styles.buttons}>
-                  <button className={styles['button']} onClick={() => handleRemove(message.id)}>
-                    Удалить
-                  </button>
-                  <button className={styles['button']} onClick={() => handleUpdate(message.id)}>
-                    Редактировать
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
-
+            ))
+          )}
         </div>
-
       </div>
       <Modal active={modalActive} setActive={setModalActive}>
-        <form action="" className={styles.form} onSubmit={handleCreate}>
+        <form action="" className={styles.form} onSubmit={handleCreateOrUpdate}>
           <div className={styles.select_wrapp}>
             <label htmlFor="types-select">Выберите тип:</label>
             <select 
@@ -161,12 +142,8 @@ const Messages = () => {
               onChange={(e) => setSelectedMessageType(e.target.value)}
             >
               <option value="">-</option>
-              <option value="task">
-                Задачи
-              </option>
-              <option value="documents_list" >
-                Список документов
-              </option>
+              <option value="task">Задачи</option>
+              <option value="documents_list">Список документов</option>
               <option value="menu">
                 Меню
               </option>
@@ -221,17 +198,17 @@ const Messages = () => {
             type='file'
             multiple
             accept='.jpg, .MP4'
-            onChange={(e) => handleFileChange(e.target.files)}
+            onChange={(e) => setSelectedFiles(Array.from(e.target.files))}
           />
-          <button className={styles.saveBtn}>Создать</button>
+          <button className={styles.saveBtn}>{isEditing ? 'Обновить' : 'Создать'}</button>
           {successMessage && <div>{successMessage}</div>}
         </form>
-      </ Modal>
+      </Modal>
     </>
-  )
-}
+  );
+};
 
-export default Messages
+export default Messages;
 
 
 
