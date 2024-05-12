@@ -22,7 +22,8 @@ const Messages = () => {
   const [updateMessage, {}] = useUpdateMessageMutation();
   const [deleteMessage, {}] = useDeleteMessageMutation();
 
-  console.log(messages)
+ 
+
   useEffect(() => {
     dispatch(apiSlice.endpoints.getMessage.initiate());
   }, [dispatch]);
@@ -35,7 +36,7 @@ const Messages = () => {
     setSelectedFiles([]); // Сбрасываем выбранные файлы
     setModalActive(true); // Открываем модальное окно
   };
-
+  console.log(messages)
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -48,7 +49,9 @@ const Messages = () => {
 
     try {
       if (isEditing) {
-        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText });
+        const b = messages && Array.isArray(messages) && messages.map(message => message.media);
+        console.log(b)
+        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles.media });
       } else {
         await createMessage(formData);
       }
@@ -72,10 +75,13 @@ const Messages = () => {
     setEditMessageId(message.id);
     setSelectedMessageType(message.type);
     setMessageText(message.message);
-    setSelectedFiles(message.media.map(mediaItem => mediaItem.media));
+    
+    // Добавляем новые файлы к уже существующим
+    const allFiles = message.media.map(mediaItem => mediaItem.media);
+    setSelectedFiles(prevFiles => [...allFiles, ...prevFiles]); // Объединяем массивы
     setIsEditing(true);
     setModalActive(true);
-  };
+};
 
   const handleRemove = (messageId) => {
     const result = window.confirm('Вы точно хотите удалить сообщение?');
@@ -85,8 +91,13 @@ const Messages = () => {
   };
 
   const handleRemoveFile = (index) => {
-    setSelectedFiles(selectedFiles.filter((file, i) => i !== index));
+    setSelectedFiles(prevFiles => {
+      const newFiles = [...prevFiles];
+      newFiles.splice(index, 1);
+      return newFiles;
+    });
   };
+
 
   return (
     <>
@@ -223,9 +234,9 @@ const Messages = () => {
           <div className={styles.selected_files}>
             <p>Выбранные файлы:</p>
             <ul>
-              {selectedFiles.map((file, index) => (
-                  <li key={index}>{isEditing ? file : file.name}<button onClick={() => handleRemoveFile(index)}>Удалить</button></li>
-              ))}
+            {selectedFiles.map((file, index) => (
+              <li key={index}>{file.name}<button onClick={() => handleRemoveFile(index)}>Удалить</button></li>
+            ))}
             </ul>
           </div>
           <button className={styles.saveBtn}>{isEditing ? 'Обновить' : 'Создать'}</button>
