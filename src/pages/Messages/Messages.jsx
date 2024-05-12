@@ -12,6 +12,7 @@ const Messages = () => {
   const [selectedMessageType, setSelectedMessageType] = useState('');
   const [messageText, setMessageText] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([])
 
 
   const dispatch = useDispatch()
@@ -25,10 +26,27 @@ const Messages = () => {
   },[dispatch])
 
   const handleCreate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("type", selectedMessageType);
+    formData.append("message", messageText);
+
+    selectedFiles.forEach(file => {
+      formData.append("media", file);
+    });
     try {
-      const result = await createMessage({ type: selectedMessageType, message: messageText }); 
+      // const messageData = { type: selectedMessageType, message: messageText };
+      // if (selectedFiles.length > 0) {
+      //   // Обработка выбранных файлов, например, загрузка на сервер
+      //   // Передача информации о файлах в запрос на создание сообщения
+      //   messageData.media = selectedFiles.map(file => ({media: [file]} ));
+      // }
+      const result = await createMessage(formData); 
+      // Очистка состояний после успешного создания сообщения 
+      setSelectedFiles([]);
       setSuccessMessage("Сообщение успешно создано!")
+      setMessageText(''); // Очистка textarea
+      setSelectedMessageType(''); // Сброс выбранного значения в селекте
       setTimeout(() => {
         setModalActive(false);
         setSuccessMessage('');
@@ -77,7 +95,10 @@ const Messages = () => {
     updateMessage({id: message, type: messageType, message: messageText,})
   }
 
-
+  const handleFileChange = (files) => {
+    // Сохранить выбранные файлы в состоянии компонента
+    setSelectedFiles(Array.from(files));;
+  }
  
 
   return (
@@ -104,11 +125,11 @@ const Messages = () => {
                     mediaItem.media.endsWith('.jpg') ? (
                       <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} key={index} />
                     ) : (
-                      mediaItem.media.endsWith('.MP4') && (
+                      mediaItem.media.endsWith('.mp4') && (
                         <video controls width="250" key={index}>
                           <source src={mediaItem.media} type="video/mp4" />
                         </video>
-                      )
+                      )                   
                     )
                   ))}
                   </div>
@@ -195,6 +216,12 @@ const Messages = () => {
               className={styles.input}
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
+          />
+          <input 
+            type='file'
+            multiple
+            accept='.jpg, .MP4'
+            onChange={(e) => handleFileChange(e.target.files)}
           />
           <button className={styles.saveBtn}>Создать</button>
           {successMessage && <div>{successMessage}</div>}
