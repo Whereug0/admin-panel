@@ -22,9 +22,19 @@ const Messages = () => {
   const [updateMessage, {}] = useUpdateMessageMutation();
   const [deleteMessage, {}] = useDeleteMessageMutation();
 
+  console.log(messages)
   useEffect(() => {
     dispatch(apiSlice.endpoints.getMessage.initiate());
   }, [dispatch]);
+
+  const handleAdd = () => {
+    setIsEditing(false); // Сбрасываем флаг редактирования
+    setEditMessageId(null); // Сбрасываем ID редактируемого сообщения
+    setSelectedMessageType(''); // Сбрасываем выбранный тип сообщения
+    setMessageText(''); // Сбрасываем текст сообщения
+    setSelectedFiles([]); // Сбрасываем выбранные файлы
+    setModalActive(true); // Открываем модальное окно
+  };
 
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
@@ -74,6 +84,10 @@ const Messages = () => {
     }
   };
 
+  const handleRemoveFile = (index) => {
+    setSelectedFiles(selectedFiles.filter((file, i) => i !== index));
+  };
+
   return (
     <>
       <Header />
@@ -82,7 +96,7 @@ const Messages = () => {
           <h1>Сообщения</h1>
           <div className={styles.search__addBtn}>
             <MyInput />
-            <button className={styles['button']} onClick={() => setModalActive(true)}>
+            <button className={styles['button']} onClick={handleAdd}>
               Добавить
             </button>
           </div>
@@ -99,6 +113,7 @@ const Messages = () => {
                     <div className={styles.media_wrapp}>
                     {message.media.map((mediaItem, index) => (
                       <div key={index}>
+                       
                         {mediaItem.media.endsWith('.jpg') || mediaItem.media.endsWith('.jpeg') ? (
                           <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} />
                         ) : mediaItem.media.endsWith('.svg') || mediaItem.media.endsWith('.pdf') || mediaItem.media.endsWith('.eps') || mediaItem.media.endsWith('.ai') || mediaItem.media.endsWith('.cdr') ? (
@@ -135,6 +150,7 @@ const Messages = () => {
           <div className={styles.select_wrapp}>
             <label htmlFor="types-select">Выберите тип:</label>
             <select 
+              required
               name="types" 
               id="types-select" 
               className={styles.select}
@@ -189,6 +205,7 @@ const Messages = () => {
             </select>
           </div>
           <textarea
+              required
               rows={10}
               className={styles.input}
               value={messageText}
@@ -197,9 +214,20 @@ const Messages = () => {
           <input 
             type='file'
             multiple
-            accept='.jpg, .MP4'
-            onChange={(e) => setSelectedFiles(Array.from(e.target.files))}
+            accept='.jpg, .mp4, .MP4, .jpeg, .svg, .pdf, .eps, .ai, .cdr, .png, .gif, .raw, .tiff, .bmp, .psd, .avi, .mov, .wmv, .mkv'
+            onChange={(e) => {
+              const newFiles = Array.from(e.target.files);
+              setSelectedFiles(prevFiles => [...prevFiles, ...newFiles]);
+            }}
           />
+          <div className={styles.selected_files}>
+            <p>Выбранные файлы:</p>
+            <ul>
+              {selectedFiles.map((file, index) => (
+                  <li key={index}>{isEditing ? file : file.name}<button onClick={() => handleRemoveFile(index)}>Удалить</button></li>
+              ))}
+            </ul>
+          </div>
           <button className={styles.saveBtn}>{isEditing ? 'Обновить' : 'Создать'}</button>
           {successMessage && <div>{successMessage}</div>}
         </form>
