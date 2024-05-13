@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Header.module.scss";
 import BurgerIcon from "../Burger-icon/BurgerIcon";
 import MyInput from "../MyInput/MyInput";
+import zIndex from "@mui/material/styles/zIndex";
 
 const Header = () => {
 
@@ -18,7 +19,7 @@ const Header = () => {
         setIsActiveBurgerMenu={setIsActiveBurgerMenu}
         onClick={handleShowBurgerMenu}
       />
-      <MyInput />
+      <MyInput zIndex="-2"/>
     </header>
   );
 };

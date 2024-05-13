@@ -51,8 +51,6 @@ const Messages = () => {
 
     try {
       if (isEditing) {
-        const b = messages && Array.isArray(messages) && messages.map(message => message.media);
-        console.log(b)
         await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles.media });
       } else {
         await createMessage(formData);
