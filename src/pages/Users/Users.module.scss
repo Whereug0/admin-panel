@@ -5,11 +5,61 @@
 }
 
 .content{
-  background-color: white;
-  padding: 50px;
-  border: 1px solid $border;
+  width: 100%;
+  background: white;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 40px;
+  gap: 30px;
+}
+
+.users_list{
+  display: flex;
   flex-direction: column;
+  width: 70%;
+  & > div{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $border;
+    & > p{
+      width: 100%;
+      padding: 10px;
+    }
+  }
+  .data{
+    color: #007bff;
+    font-weight: 500;
+  }
+  .user{
+    .name{
+      width: 100%;
+      font-weight: 500;
+    }
+    .link{
+      color: #007bff;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+.Search__wrapp{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sortSelector{
+  display: flex;
+  align-items: center;
+  select{
+    height: 100%;
+    border: 2px solid $border;
+
+  }
 }

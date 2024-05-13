@@ -168,7 +168,7 @@ const Messages = () => {
               value={selectedMessageType}
               onChange={(e) => setSelectedMessageType(e.target.value)}
             >
-              <option value="">-</option>
+              <option value="">-----</option>
               <option value="task">Задачи</option>
               <option value="documents_list">Список документов</option>
               <option value="menu">
@@ -252,21 +252,3 @@ export default Messages;
 
 
 
-{/* const translation = {
-  "task": "Задачи",
-  "documents_list": "Список документов",
-  "menu": "Меню",
-  "company_missions": "Миссии компании",
-  "company values": "Ценности компании",
-  "office_address": "Адрес офиса",
-  "about_office": "Описание офиса",
-  "sky_lab": "Скай лаб",
-  "events": "Ивенты",
-  "rest": "Отдых",
-  "sport": "Спорт",
-  "knowledge": "Знания",
-  "bbox": "bbox",
-  "to_do_list": "Список дел пользователя",
-  "internal_kitchen": "Внутрення кухня",
-  "tradition": "Традиция",
-}; */}
