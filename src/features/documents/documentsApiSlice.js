@@ -6,7 +6,7 @@ import { apiSlice } from "../api/apiSlice";
 const documentsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDocument: builder.query({
-      query: () => "/main/document/", // Путь к эндпоинту для получения сообщений
+      query: () => "/main/document/", 
       providesTags: result => ['Documents']
     }),
     createDocument: builder.mutation({

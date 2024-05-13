@@ -8,8 +8,8 @@ import { apiSlice } from '../../features/api/apiSlice';
 
 
 const Users = () => {
-  const [sortBy, setSortBy] = useState('-----'); // По умолчанию сортировка по имени
-  const [searchTerm, setSearchTerm] = useState(''); // Поисковый запрос
+  const [sortBy, setSortBy] = useState('-----'); 
+  const [searchItem, setSearchItem] = useState(''); // Поисковый запрос
 
   const dispatch = useDispatch();
 
@@ -30,22 +30,9 @@ const Users = () => {
   console.log(users);
 
   const translation = {
-    "task": "Задачи",
-    "documents_list": "Список документов",
-    "menu": "Меню",
-    "company_missions": "Миссии компании",
-    "company values": "Ценности компании",
-    "office_address": "Адрес офиса",
-    "about_office": "Описание офиса",
-    "sky_lab": "Скай лаб",
-    "events": "Ивенты",
-    "rest": "Отдых",
-    "sport": "Спорт",
-    "knowledge": "Знания",
-    "bbox": "bbox",
-    "to_do_list": "Список дел пользователя",
-    "internal_kitchen": "Внутренняя кухня",
-    "tradition": "Традиция",
+    "start": "Сборка документов",
+    "collect_docs": "Собрал(а) документы",
+    "in_office": "Прибыл в офис"
   };
 
   const handleSortChange = (e) => {
@@ -53,13 +40,13 @@ const Users = () => {
   };
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchItem(e.target.value);
   };
 
   // Функция для фильтрации пользователей по имени и статусу
   const filteredUsers = users.filter((user) => {
-    return user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-           user.status.toLowerCase().includes(searchTerm.toLowerCase());
+    return user.name.toLowerCase().includes(searchItem.toLowerCase()) || 
+           user.status.toLowerCase().includes(searchItem.toLowerCase());
   });
 
   // Функция для сортировки пользователей
@@ -82,7 +69,7 @@ const Users = () => {
           <div className={styles.users_list}>
             <div className={styles.search_sort}>
               <div className={styles.Search__wrapp}>
-                <MyInput value={searchTerm} onChange={handleSearch} />
+                <MyInput value={searchItem} onChange={handleSearch} />
               </div>
               <div className={styles.sortSelector}>
                 <select value={sortBy} onChange={handleSortChange}>
@@ -98,10 +85,10 @@ const Users = () => {
               <p>Чат айди</p>
               <p>Ссылка</p>
             </div>
-            {sortedUsers.map((user) => (
+            {users && sortedUsers.map((user) => (
               <div className={styles.user} key={user.id}>
                 <p className={styles.name}>{user.name}</p>
-                <p>{user.status}</p>
+                <p>{translation[user.status]}</p>
                 <p>{user.telegram_chat_id}</p>
                 <a className={styles.link} href={user.telegram_profile_link} target='_blank'>{user.telegram_profile_link}</a>
               </div>

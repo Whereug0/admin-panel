@@ -6,7 +6,7 @@ import { apiSlice } from "../api/apiSlice";
 const holidayApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getHoliday: builder.query({
-      query: () => "/main/holiday/", // Путь к эндпоинту для получения сообщений
+      query: () => "/main/holiday/", 
       providesTags: result => ['Holidays']
     }),
     createHoliday: builder.mutation({

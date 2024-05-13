@@ -44,7 +44,6 @@ const Holidays = () => {
     if(result) {
       deleteHoliday({id: holiday})
     }else {
-      
     }
   }
 
@@ -100,7 +99,6 @@ const Holidays = () => {
               </div>
             </div>
           ))}
-
         </div>
       </div>
     </>

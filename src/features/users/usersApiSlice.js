@@ -6,7 +6,7 @@ import { apiSlice } from "../api/apiSlice";
 const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUser: builder.query({
-      query: () => "/main/user/", // Путь к эндпоинту для получения сообщений
+      query: () => "/main/user/", 
       providesTags: result => ['Users']
     }),
     createUser: builder.mutation({

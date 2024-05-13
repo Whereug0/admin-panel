@@ -36,7 +36,9 @@ const Messages = () => {
     setSelectedFiles([]); // Сбрасываем выбранные файлы
     setModalActive(true); // Открываем модальное окно
   };
+  
   console.log(messages)
+
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -75,7 +77,7 @@ const Messages = () => {
     setEditMessageId(message.id);
     setSelectedMessageType(message.type);
     setMessageText(message.message);
-    
+    setSelectedFiles([]);
     // Добавляем новые файлы к уже существующим
     const allFiles = message.media.map(mediaItem => mediaItem.media);
     setSelectedFiles(prevFiles => [...allFiles, ...prevFiles]); // Объединяем массивы
@@ -90,11 +92,17 @@ const Messages = () => {
     }
   };
 
-  const handleRemoveFile = (index) => {
+  const handleRemoveFile = (fileId) => {
     setSelectedFiles(prevFiles => {
-      const newFiles = [...prevFiles];
-      newFiles.splice(index, 1);
-      return newFiles;
+      // Находим индекс файла по его ID
+      const index = prevFiles.findIndex(file => file.id === fileId);
+      if (index !== -1) {
+        // Создаем новый массив без удаленного файла
+        const newFiles = [...prevFiles.slice(0, index), ...prevFiles.slice(index + 1)];
+        return newFiles;
+      } else {
+        return prevFiles;
+      }
     });
   };
 
@@ -240,7 +248,7 @@ const Messages = () => {
             </ul>
           </div>
           <button className={styles.saveBtn}>{isEditing ? 'Обновить' : 'Создать'}</button>
-          {successMessage && <div>{successMessage}</div>}
+          {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
         </form>
       </Modal>
     </>
@@ -252,3 +260,50 @@ export default Messages;
 
 
 
+
+
+
+//               <option value="task">Задачи</option>
+//               <option value="documents_list">Список документов</option>
+//               <option value="menu">
+//                 Меню
+//               </option>
+//               <option value="company_missions">
+//                 Миссии компании
+//               </option>
+//               <option value="company values">
+//                 Ценности компании
+//               </option>
+//               <option value="office_address">
+//                 Адресс офиса
+//               </option>
+//               <option value="about_office">
+//                 Описание офиса
+//               </option>
+//               <option value="sky_lab">
+//                 Скай лаб
+//               </option>
+//               <option value="events">
+//                 Ивенты
+//               </option>
+//               <option value="rest">
+//                 Отдых
+//               </option>
+//               <option value="sport">
+//                 Спорт
+//               </option>
+//               <option value="knowledge">
+//                 Знания
+//               </option>
+//               <option value="bbox">
+//                 bbox
+//               </option>
+//               <option value="to_do_list">
+//                 Список дел пользователя
+//               </option>
+//               <option value="internal_kitchen">
+//                 Внутрення кухня
+//               </option>
+//               <option value="tradition">
+//                 Традиция
+//               </option>

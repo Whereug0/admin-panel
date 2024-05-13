@@ -6,7 +6,7 @@ import { apiSlice } from "../api/apiSlice";
 const messagesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMessage: builder.query({
-      query: () => "/main/message/", // Путь к эндпоинту для получения сообщений
+      query: () => "/main/message/", 
       providesTags: result => ['Messages']
     }),
     createMessage: builder.mutation({
