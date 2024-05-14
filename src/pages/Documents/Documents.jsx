@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
-import styles from './Documents.module.scss';
 import { apiSlice } from '../../features/api/apiSlice';
 import { useDispatch } from 'react-redux';
 import MyInput from '../../components/MyInput/MyInput';
 import { useGetDocumentQuery, useCreateDocumentMutation, useUpdateDocumentMutation, useDeleteDocumentMutation } from '../../features/documents/documentsApiSlice';
 import Modal from '../../components/Modal/Modal';
 
+import {ReactComponent as EditIcon} from '../../assets/icons/edit.svg';
+import {ReactComponent as DeleteIcon} from '../../assets/icons/delete.svg';
+
+import styles from './Documents.module.scss';
 
 const Documents = () => {
   const [searchItem, setSearchItem] = useState('');
@@ -140,15 +143,19 @@ const Documents = () => {
             </div>
             <div className={styles.data}>
               <p>Название</p>
-              <p>Инструкция</p>
+              <p className={styles.instruction}>Инструкция</p>
             </div>
             {documents && filteredDocuments.map((document) => (
               <div className={styles.document} key={document.id}>
                 <p className={styles.name}>{document.name}</p>
-                <p>{document.instruction}</p>
+                <p className={styles.instruction}>{document.instruction}</p>
                 <div className={styles.buttons}>
-                  <button onClick={() => handleRemove(document.id)}>Удалить</button>
-                  <button onClick={() => handleEdit(document)}>Редактировать</button>
+                  <button onClick={() => handleRemove(document.id)}>
+                    <DeleteIcon />
+                  </button>
+                  <button onClick={() => handleEdit(document)}>
+                    <EditIcon className={styles.icon}/>
+                  </button>
                 </div>
               </div>
             ))}

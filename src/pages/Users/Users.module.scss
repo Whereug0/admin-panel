@@ -11,20 +11,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   gap: 30px;
 }
 
 .users_list{
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
   box-shadow: $beeline-color-boxshadow;
   border-radius: 15px;
-
+  overflow-x: auto;
+  border: 1px solid $border;
   .search_box{
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;  
+    // border-top-right-radius: 15px;
+    // border-top-left-radius: 15px;
+    border: none;
   }
   & > :last-child {
     border-bottom-left-radius: 15px;
@@ -78,5 +79,29 @@
       background: #1D1F1E;
       border: 1px solid $border;
     };
+  }
+}
+
+
+@media (max-width: 1500px) {
+  .users_list{
+    width: 100%;
+  }
+}
+
+@media (max-width: 850px) {
+  .container{
+    padding: 100px 20px;
+  }
+}
+
+@media (max-width: 750px) {
+  .users_list{
+    .data{
+      width: 710px;
+    }
+    .user{
+      width: 710px;
+    }
   }
 }

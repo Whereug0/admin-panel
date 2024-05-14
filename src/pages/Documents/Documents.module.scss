@@ -13,16 +13,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   gap: 30px;
-  
-
 }
 
 .documents_list{
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 90%;
   background: #1D1F1E;
   border-radius: 15px;
   // box-shadow: $beeline-color-boxshadow;
@@ -90,8 +87,11 @@
   gap: 10px;
   button{
     width: 100%;
-    padding: 7px;
-    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 5px;
     color: black;
     background: $beeline-color;
   }
@@ -146,4 +146,35 @@
 
 .successDocument{
   color: green;
+}
+
+@media (max-width: 1200px) {
+  .documents_list{
+    width: 100%;
+  }
+}
+
+.icon{
+  width: 25px;
+  height: 25px;
+}
+
+
+@media (max-width: 500px) {
+  .instruction{
+    display: none;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .container{
+    padding: 100px 20px;
+  }
+}
+
+@media (max-width: 320px) {
+  .container{
+    padding: 100px 10px;
+  }
 }

@@ -34,11 +34,20 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
   .input__wrapp {
     .input__box {
-      width: 250px;
+      width: 80%;
     }
   }
+}
 
+@media (max-width: 550px) {
+  .input__wrapp {
+    .input__box {
+      .input{
+        width: 100%;
+      }
+    }
+  }
 }
