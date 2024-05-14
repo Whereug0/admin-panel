@@ -5,9 +5,8 @@
 }
 
 .content_wrapp{
-  background-color: white;
+  background-color: transparent;
   padding: 50px;
-  border: 1px solid $border;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +25,7 @@
   width: 600px;
   border: 1px solid $border;
   padding: 10px 20px;
-  box-shadow: $beeline-color-boxshadow;
+  border-radius: 15px;
 }
 
 .icon{
@@ -45,11 +44,11 @@
   gap: 10px;
 }
 .button{
-  padding: 10px;
-  background: $background__menu;
-  border-radius: 5px;
+  padding: 7px;
+  background: $beeline-color;
+  border-radius: 12px;
   cursor: pointer;
-  color: white;
+  color: black;
   border: none;
 }
 
@@ -59,3 +58,8 @@
   height: 300px;
 }
 
+.inputFiles{
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+}

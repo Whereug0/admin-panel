@@ -41,7 +41,13 @@
     height: 20px;
     padding: 30px 20px;
     &:hover {
-      background-color: $background-active__menu;
+      background-color: #FCD305;
+      color: black;
+      .icon {    
+          color: black;
+          fill: black;
+          stroke: black;
+      }
     }
   }
   &__text {
@@ -49,6 +55,7 @@
     letter-spacing: 1px;
   }
   &.nav-menu-active {
+    border-right: 1px solid $border;
     cursor: default;
     transform: translateY(0);
     opacity: 1;
@@ -76,14 +83,17 @@
 .icon {
   width: 25px;
   height: 25px;
-  color: $icon-color;
-  fill: $icon-color;
-  stroke: $icon-color;
+  color: white;
+  fill: white;
+  stroke: white;
+
   rect{
     stroke: none;
+
   }
   line{
-    stroke: $icon-color;
+    stroke: white;
+
   }
 }
 

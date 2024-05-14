@@ -132,7 +132,7 @@ const Documents = () => {
         <div className={styles.content}>
           <h2>Список документов</h2>
           <div className={styles.documents_list}>
-            <div className={styles.search_sort}>
+            <div className={styles.search_box}>
               <div className={styles.Search__wrapp}>
                 <MyInput value={searchItem} onChange={handleSearch} />
                 <button onClick={handleAdd}>Добавить</button>

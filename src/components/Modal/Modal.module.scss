@@ -26,8 +26,7 @@
   justify-content: center;
   padding: 20px;
   border-radius: 12px;
-  background-color: white;
-  box-shadow: $beeline-color-boxshadow;
+  background-color: $background;
   border: 1px solid $border;
   transform: scale(0.5);
   transition: 0.4s all;
@@ -38,3 +37,8 @@
   transform: scale(1);
 }
 
+@media (max-width: 780px) {
+  .modal__content{
+    width: 95vw;
+  }
+}

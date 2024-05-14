@@ -25,6 +25,7 @@ const messagesApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Messages']
     }),
+    
     deleteMessage: builder.mutation({
       query: (message) => ({
         url: `/main/message/${message.id}/`,

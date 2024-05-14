@@ -9,13 +9,15 @@ const authSlice = createSlice({
   },
   reducers: {
     setCredentials: (state, action) => {
-      const {username, access} = action.payload
+      const {username, access, refresh} = action.payload
       state.user = username
       state.token = access
+      state.refresh = refresh
     },
     logout: (state, action) => {
       state.user = null
       state.token = null
+      state.refresh = null
     }
   }
 })

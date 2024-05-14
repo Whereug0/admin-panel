@@ -5,9 +5,8 @@
 }
 
 .content_wrapp{
-  background-color: white;
+  background-color: transparent;
   padding: 50px;
-  border: 1px solid $border;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +25,7 @@
   width: 600px;
   border: 1px solid $border;
   padding: 10px 20px;
-  box-shadow: $beeline-color-boxshadow;
+  border-radius: 15px;
   .message__text{
     padding: 20px;
     font-size: 15px;
@@ -55,11 +54,12 @@
 }
 .button{
   padding: 7px;
-  background: $background__menu;
-  border-radius: 5px;
+  background-color: $beeline-color;
+  color: black;
+  border-radius: 15px;
   cursor: pointer;
-  color: white;
   border: none;
+  border: 1px solid $border;
 }
 
 .img {
@@ -76,20 +76,27 @@
     padding: 20px;
     font-size: 16px;
     resize: 'vertical'; 
-    // min-height: 100px;
-    // max-height: 500px;
+
   }
   .select{
     width: 150px;
     height: 30px;
-    padding: 5px;
+    padding: 2px;
     font-size: 16px;
+    background: transparent;
+    color: white;
+    border: 1px solid $border;
+    outline: none;
+    option{
+      background: $background;
+    }
   }
   .saveBtn{
     width: 150px;
     padding: 10px;
-    color: white;
-    background-color: $background__menu;
+    color: black;
+    background-color: $beeline-color;
+    border-radius: 15px;
   }
 }
 
@@ -101,4 +108,10 @@
 
 .successMessage{
   color: green;
+}
+
+.inputFiles{
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
 }

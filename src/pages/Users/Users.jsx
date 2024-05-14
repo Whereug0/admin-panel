@@ -67,7 +67,7 @@ const Users = () => {
           <h2>Список пользователей</h2>
           
           <div className={styles.users_list}>
-            <div className={styles.search_sort}>
+            <div className={styles.search_box}>
               <div className={styles.Search__wrapp}>
                 <MyInput value={searchItem} onChange={handleSearch} />
               </div>

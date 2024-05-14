@@ -45,13 +45,14 @@ const Messages = () => {
     formData.append("type", selectedMessageType);
     formData.append("message", messageText);
 
-    selectedFiles.forEach(file => {
-      formData.append("media", file);
-    });
+    const existingMediaUrls = selectedFiles.filter(file => typeof file === 'string');
+    const newMediaFiles = selectedFiles.filter(file => file instanceof File);
+    formData.append('media_urls_to_keep', JSON.stringify(existingMediaUrls));
+    newMediaFiles.forEach(file => formData.append('media', file));
 
     try {
       if (isEditing) {
-        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles.media });
+        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: newMediaFiles.media });
       } else {
         await createMessage(formData);
       }
@@ -104,7 +105,7 @@ const Messages = () => {
     });
   };
 
-
+  console.log(selectedFiles)
   return (
     <>
       <Header />
@@ -231,18 +232,22 @@ const Messages = () => {
           <input 
             type='file'
             multiple
+            className={styles.inputFiles}
             accept='.jpg, .mp4, .MP4, .jpeg, .svg, .pdf, .eps, .ai, .cdr, .png, .gif, .raw, .tiff, .bmp, .psd, .avi, .mov, .wmv, .mkv'
             onChange={(e) => {
               const newFiles = Array.from(e.target.files);
-              setSelectedFiles(prevFiles => [...prevFiles, ...newFiles]);
+              setSelectedFiles(prevFiles => [...prevFiles, ...newFiles.filter(file => file instanceof File)]);
             }}
           />
           <div className={styles.selected_files}>
             <p>Выбранные файлы:</p>
             <ul>
-            {selectedFiles.map((file, index) => (
-              <li key={index}>{file.name}<button onClick={() => handleRemoveFile(index)}>Удалить</button></li>
-            ))}
+              {selectedFiles.map((file, index) => (
+                <li key={index}>
+                  {file.name}
+                  <button onClick={() => handleRemoveFile(index)}>Удалить</button>
+                </li>
+              ))}
             </ul>
           </div>
           <button className={styles.saveBtn}>{isEditing ? 'Обновить' : 'Создать'}</button>

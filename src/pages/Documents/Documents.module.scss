@@ -7,13 +7,15 @@
 
 .content{
   width: 100%;
-  background: white;
+  background: #1D1F1E;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
   gap: 30px;
+  
 
 }
 
@@ -21,8 +23,17 @@
   display: flex;
   flex-direction: column;
   width: 70%;
-  box-shadow: $beeline-color-boxshadow;
-
+  background: #1D1F1E;
+  border-radius: 15px;
+  // box-shadow: $beeline-color-boxshadow;
+  .search_box{
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;  
+  }
+  & > :last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
   & > div{
     display: flex;
     justify-content: space-between;
@@ -32,6 +43,7 @@
     & > p{
       width: 100%;
       padding: 10px;
+      
     }
   }
   .data{
@@ -53,8 +65,12 @@
   button{
     padding: 7px;
     color: white;
-    background-color: $background__menu;
-    border-radius: 5px;
+    background-color: transparent;
+    border-radius: 10px;
+    &:hover{
+      color: black;
+      background: $beeline-color;
+    }
   }
 }
 
@@ -75,9 +91,9 @@
   button{
     width: 100%;
     padding: 7px;
-    color: white;
-    background-color: $background__menu;
-    border-radius: 5px;
+    border-radius: 15px;
+    color: black;
+    background: $beeline-color;
   }
 }
 
@@ -103,8 +119,9 @@
   .saveBtn{
     width: 150px;
     padding: 10px;
-    color: white;
-    background-color: $background__menu;
+    color: black;
+    border-radius: 15px;
+    background-color: $beeline-color;
   }
 }
 

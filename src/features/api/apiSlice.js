@@ -24,22 +24,23 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
 
-  if(result?.error?.originalStatus === 403) {
+  if(result.error && result.error.status === 401) {
     console.log('Отправка запроса на обновление токена')
 
     const refreshResult = await baseQuery('/accounts/refresh/', api, extraOptions)
-    const refreshToken = refreshResult?.data?.refresh; // Предположим, что токен находится в свойстве refreshToken объекта данных
-    console.log(refreshToken)
+    const { refresh: refreshToken } = refreshResult?.data; // Предположим, что токены находятся в свойствах access и refresh объекта данных
+    console.log(refreshResult)
     if(refreshToken) {
       localStorage.setItem('refreshToken', refreshToken);
-
+      
       const user = api.getState().auth.user;
-      api.dispatch(setCredentials({...refreshResult.data.refresh, user}));
+      api.dispatch(setCredentials({ user, refreshToken }));
 
-      // Повторно выполнить исходный запрос с обновленным токеном
+      // Повторно выполнить исходный запрос с обновленным токеном доступа
       result = await baseQuery(args, api, extraOptions);
+      console.log(result)
     } else {
-      // Если не удалось получить токен из ответа, разлогинить пользователя
+      // Если не удалось получить токены из ответа, разлогинить пользователя
       api.dispatch(logout());
     }
   }
@@ -51,41 +52,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  endpoints: (builder) => ({
-    // getMessage: builder.query({
-    //   query: () => "/main/message/", // Путь к эндпоинту для получения сообщений
-    //   providesTags: result => ['Messages']
-    // }),
-    // createMessage: builder.mutation({
-    //   query: (body) => ({
-    //     url: '/main/message/',
-    //     method: 'POST',
-    //     body,
-    //   }),
-    //   invalidatesTags: ['Messages']
-    // }),
-    // updateMessage: builder.mutation({
-    //   query: (message) => ({
-    //     url: `/main/message/${message.id}/`,
-    //     method: 'PUT',
-    //     body: message,
-    //   }),
-    //   invalidatesTags: ['Messages']
-    // }),
-    // deleteMessage: builder.mutation({
-    //   query: (message) => ({
-    //     url: `/main/message/${message.id}/`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['Messages']
-    // })
-  })
+  endpoints: (builder) => ({})
 })
 
 
-export const { 
-  useGetMessageQuery, 
-  useCreateMessageMutation,
-  useUpdateMessageMutation,
-  useDeleteMessageMutation,
-} = apiSlice;
+export const {} = apiSlice;

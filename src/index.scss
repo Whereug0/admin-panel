@@ -1,8 +1,9 @@
 @import './assets/styles/colors.scss';
 
 body{
-  background-color: #f7f7f7;
+  background-color: #1D1F1E;
   font-family: "Roboto", sans-serif;
+  color: white;
 }
 
 *{
@@ -23,5 +24,22 @@ a{
 
 textarea {
   resize: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  outline: none;
+  border: 1px solid $border;
+}
+input{
+  background: transparent;
+  color: white;
+  outline: none;
+  border: 1px solid $border;
+  border-radius: 10px;
+}
+
+button {
+  border: 1px solid $border;
+  cursor: pointer;
+
 }
