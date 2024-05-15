@@ -7,6 +7,9 @@ import Header from '../../components/Header/Header';
 import MyInput from '../../components/MyInput/MyInput';
 import Modal from '../../components/Modal/Modal';
 
+import {ReactComponent as EditIcon} from '../../assets/icons/edit.svg';
+import {ReactComponent as DeleteIcon} from '../../assets/icons/delete.svg';
+
 const Messages = () => {
   const [modalActive, setModalActive] = useState(false);
   const [editMessageId, setEditMessageId] = useState(null);
@@ -45,14 +48,13 @@ const Messages = () => {
     formData.append("type", selectedMessageType);
     formData.append("message", messageText);
 
-    const existingMediaUrls = selectedFiles.filter(file => typeof file === 'string');
-    const newMediaFiles = selectedFiles.filter(file => file instanceof File);
-    formData.append('media_urls_to_keep', JSON.stringify(existingMediaUrls));
-    newMediaFiles.forEach(file => formData.append('media', file));
+    
+    selectedFiles.forEach(file => formData.append('media', file ));
 
     try {
       if (isEditing) {
-        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: newMediaFiles.media });
+        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles.media });
+        console.log({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles })
       } else {
         await createMessage(formData);
       }
@@ -72,17 +74,32 @@ const Messages = () => {
   };
 
   // Функция для открытия модального окна для редактирования сообщения
-  const handleEdit = (message) => {
+  const handleEdit = async (message) => {
     setEditMessageId(message.id);
     setSelectedMessageType(message.type);
     setMessageText(message.message);
     setSelectedFiles([]);
-    // Добавляем новые файлы к уже существующим
-    const allFiles = message.media.map(mediaItem => mediaItem.media);
-    setSelectedFiles(prevFiles => [...allFiles, ...prevFiles]); // Объединяем массивы
-    setIsEditing(true);
-    setModalActive(true);
-};
+    try {
+      const fileObjects = await Promise.all(message.media.map(async (mediaItem) => {
+        if (typeof mediaItem.media === 'string') {
+          const response = await fetch(mediaItem);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${mediaItem.media}`);
+          }
+          const blob = await response.blob();
+          return new File([blob], mediaItem.media);
+        } else {
+          return mediaItem.media;
+        }
+      }));
+      setSelectedFiles(prevFiles => [...fileObjects, ...prevFiles]);
+      setIsEditing(true);
+      setModalActive(true);
+    } catch (error) {
+      console.error("Ошибка при загрузке файлов:", error);
+      // Дополнительная обработка ошибки, например, вывод сообщения об ошибке
+    }
+  };
 
   const handleRemove = (messageId) => {
     const result = window.confirm('Вы точно хотите удалить сообщение?');
@@ -92,20 +109,11 @@ const Messages = () => {
   };
 
   const handleRemoveFile = (fileId) => {
-    setSelectedFiles(prevFiles => {
-      // Находим индекс файла по его ID
-      const index = prevFiles.findIndex(file => file.id === fileId);
-      if (index !== -1) {
-        // Создаем новый массив без удаленного файла
-        const newFiles = [...prevFiles.slice(0, index), ...prevFiles.slice(index + 1)];
-        return newFiles;
-      } else {
-        return prevFiles;
-      }
-    });
-  };
+  setSelectedFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
+};
 
   console.log(selectedFiles)
+
   return (
     <>
       <Header />
@@ -151,10 +159,10 @@ const Messages = () => {
                   </div>
                   <div className={styles.buttons}>
                     <button className={styles['button']} onClick={() => handleRemove(message.id)}>
-                      Удалить
+                      <DeleteIcon />
                     </button>
                     <button className={styles['button']} onClick={() => handleEdit(message)}>
-                      Редактировать
+                      <EditIcon className={styles.icon}/>
                     </button>
                   </div>
                 </div>

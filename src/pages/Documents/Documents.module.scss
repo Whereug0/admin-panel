@@ -148,16 +148,18 @@
   color: green;
 }
 
+.icon{
+  width: 25px;
+  height: 25px;
+}
+
 @media (max-width: 1200px) {
   .documents_list{
     width: 100%;
   }
 }
 
-.icon{
-  width: 25px;
-  height: 25px;
-}
+
 
 
 @media (max-width: 500px) {
@@ -169,12 +171,12 @@
 
 @media (max-width: 450px) {
   .container{
-    padding: 100px 20px;
+    padding: 80px 20px;
   }
 }
 
 @media (max-width: 320px) {
   .container{
-    padding: 100px 10px;
+    padding: 80px 10px;
   }
 }
