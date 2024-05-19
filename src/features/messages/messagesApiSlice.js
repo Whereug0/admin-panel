@@ -3,6 +3,7 @@ import { apiSlice } from "../api/apiSlice";
 
 
 
+
 const messagesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMessage: builder.query({
@@ -21,7 +22,7 @@ const messagesApiSlice = apiSlice.injectEndpoints({
       query: (message) => ({
         url: `/main/message/${message.id}/`,
         method: 'PUT',
-        body: message,
+        body: message.body,
       }),
       invalidatesTags: ['Messages']
     }),

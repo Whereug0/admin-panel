@@ -1,3 +1,3 @@
-export const BASE_URL = 'http://51.20.18.88'
-// http://51.20.18.88
+export const BASE_URL = 'http://13.60.21.93'
+// http://13.60.21.93
 // http://13.51.198.75

@@ -21,11 +21,9 @@ const Messages = () => {
 
   const dispatch = useDispatch();
   const { data: messages, isLoading, error } = useGetMessageQuery();
-  const [createMessage, {}] = useCreateMessageMutation();
-  const [updateMessage, {}] = useUpdateMessageMutation();
-  const [deleteMessage, {}] = useDeleteMessageMutation();
-
- 
+  const [createMessage] = useCreateMessageMutation();
+  const [updateMessage] = useUpdateMessageMutation();
+  const [deleteMessage] = useDeleteMessageMutation();
 
   useEffect(() => {
     dispatch(apiSlice.endpoints.getMessage.initiate());
@@ -39,22 +37,17 @@ const Messages = () => {
     setSelectedFiles([]); // Сбрасываем выбранные файлы
     setModalActive(true); // Открываем модальное окно
   };
-  
-  console.log(messages)
 
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("type", selectedMessageType);
     formData.append("message", messageText);
-
-    
-    selectedFiles.forEach(file => formData.append('media', file ));
+    selectedFiles.forEach(file => formData.append('media', file));
 
     try {
       if (isEditing) {
-        await updateMessage({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles.media });
-        console.log({ id: editMessageId, type: selectedMessageType, message: messageText, media: selectedFiles })
+        await updateMessage({ id: editMessageId, body: formData });
       } else {
         await createMessage(formData);
       }
@@ -69,7 +62,6 @@ const Messages = () => {
       }, 1000);
     } catch (error) {
       console.error("Ошибка при создании/обновлении сообщения:", error);
-      console.log("Дополнительная информация об ошибке:", error.response.data);
     }
   };
 
@@ -79,6 +71,7 @@ const Messages = () => {
     setSelectedMessageType(message.type);
     setMessageText(message.message);
     setSelectedFiles([]);
+
     try {
       const fileObjects = await Promise.all(message.media.map(async (mediaItem) => {
         if (typeof mediaItem.media === 'string') {
@@ -97,7 +90,6 @@ const Messages = () => {
       setModalActive(true);
     } catch (error) {
       console.error("Ошибка при загрузке файлов:", error);
-      // Дополнительная обработка ошибки, например, вывод сообщения об ошибке
     }
   };
 
@@ -108,11 +100,9 @@ const Messages = () => {
     }
   };
 
-  const handleRemoveFile = (fileId) => {
-  setSelectedFiles(prevFiles => prevFiles.filter(file => file.id !== fileId));
-};
-
-  console.log(selectedFiles)
+  const handleRemoveFile = (fileIndex) => {
+    setSelectedFiles(prevFiles => prevFiles.filter((_, index) => index !== fileIndex));
+  };
 
   return (
     <>
@@ -139,7 +129,6 @@ const Messages = () => {
                     <div className={styles.media_wrapp}>
                     {message.media.map((mediaItem, index) => (
                       <div key={index}>
-                       
                         {mediaItem.media.endsWith('.jpg') || mediaItem.media.endsWith('.jpeg') ? (
                           <img className={styles.img} src={mediaItem.media} alt={`img-${index}`} />
                         ) : mediaItem.media.endsWith('.svg') || mediaItem.media.endsWith('.pdf') || mediaItem.media.endsWith('.eps') || mediaItem.media.endsWith('.ai') || mediaItem.media.endsWith('.cdr') ? (
@@ -253,7 +242,7 @@ const Messages = () => {
               {selectedFiles.map((file, index) => (
                 <li key={index}>
                   {file.name}
-                  <button onClick={() => handleRemoveFile(index)}>Удалить</button>
+                  <button type="button" onClick={() => handleRemoveFile(index)}>Удалить</button>
                 </li>
               ))}
             </ul>
@@ -267,54 +256,3 @@ const Messages = () => {
 };
 
 export default Messages;
-
-
-
-
-
-
-
-//               <option value="task">Задачи</option>
-//               <option value="documents_list">Список документов</option>
-//               <option value="menu">
-//                 Меню
-//               </option>
-//               <option value="company_missions">
-//                 Миссии компании
-//               </option>
-//               <option value="company values">
-//                 Ценности компании
-//               </option>
-//               <option value="office_address">
-//                 Адресс офиса
-//               </option>
-//               <option value="about_office">
-//                 Описание офиса
-//               </option>
-//               <option value="sky_lab">
-//                 Скай лаб
-//               </option>
-//               <option value="events">
-//                 Ивенты
-//               </option>
-//               <option value="rest">
-//                 Отдых
-//               </option>
-//               <option value="sport">
-//                 Спорт
-//               </option>
-//               <option value="knowledge">
-//                 Знания
-//               </option>
-//               <option value="bbox">
-//                 bbox
-//               </option>
-//               <option value="to_do_list">
-//                 Список дел пользователя
-//               </option>
-//               <option value="internal_kitchen">
-//                 Внутрення кухня
-//               </option>
-//               <option value="tradition">
-//                 Традиция
-//               </option>
