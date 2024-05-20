@@ -17,6 +17,14 @@ const holidayApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Holidays']
     }),
+    createMediaFile: builder.mutation({
+      query: (body) => ({
+        url: '/main/holidays_media/',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Holidays']
+    }),
     updateHolidays: builder.mutation({
       query: (holiday) => ({
         url: `/main/holiday/${holiday.id}/`,
@@ -41,4 +49,5 @@ export const {
   useCreateHolidayMutation,
   useUpdateHolidaysMutation,
   useDeleteHolidaysMutation,
+  useCreateMediaFileMutation
 } = holidayApiSlice;
