@@ -16,6 +16,7 @@ import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/icons/delete.svg";
 
 const Messages = () => {
+  const [searchItem, setSearchItem] = useState('');
   const [modalActive, setModalActive] = useState(false);
   const [editMessageId, setEditMessageId] = useState(null);
   const [selectedMessageType, setSelectedMessageType] = useState("");
@@ -115,6 +116,16 @@ const Messages = () => {
     );
   };
 
+  const handleSearch = (e) => {
+    setSearchItem(e.target.value);
+  };
+  
+  const filteredMessages = messages
+  ? messages.filter((message) =>
+      message.message.toLowerCase().includes(searchItem.toLowerCase())
+    )
+  : [];
+
   return (
     <>
     <Header />
@@ -122,7 +133,7 @@ const Messages = () => {
       <div className={styles.content_wrapp}>
         <h1>Сообщения</h1>
         <div className={styles.search__addBtn}>
-          <MyInput />
+          <MyInput value={searchItem} onChange={handleSearch}/>
           <button className={styles.button} onClick={handleAdd}>
             Добавить
           </button>
@@ -133,7 +144,7 @@ const Messages = () => {
           <div>Error: {error.message}</div>
         ) : (
           messages &&
-          messages.map((message) => (
+          filteredMessages.map((message) => (
             <div className={styles.content} key={message.id}>
               <div className={styles.message__wrapp}>
                 <div className={styles.message}>

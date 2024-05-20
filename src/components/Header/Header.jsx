@@ -19,7 +19,7 @@ const Header = () => {
         setIsActiveBurgerMenu={setIsActiveBurgerMenu}
         onClick={handleShowBurgerMenu}
       />
-      <MyInput zIndex="-2"/>
+      {/* <MyInput zIndex="-2"/> */}
     </header>
   );
 };

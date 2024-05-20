@@ -5,22 +5,25 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
+    token: localStorage.getItem('accessToken') || null,
+    refresh: localStorage.getItem('refreshToken') || null,
   },
   reducers: {
     setCredentials: (state, action) => {
-      const {username, access, refresh} = action.payload
-      state.user = username
-      state.token = access
-      state.refresh = refresh
+      const { user, access, refresh } = action.payload;
+      state.user = user;
+      state.token = access;
+      state.refresh = refresh;
     },
-    logout: (state, action) => {
-      state.user = null
-      state.token = null
-      state.refresh = null
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.refresh = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   }
-})
+});
 
 
 export const {setCredentials, logout} = authSlice.actions

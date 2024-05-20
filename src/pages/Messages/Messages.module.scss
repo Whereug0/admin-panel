@@ -17,11 +17,19 @@
   }
 }
 
+.content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .message{
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 600px;
+  min-width: 200px;
   border: 1px solid $border;
   padding: 10px 20px;
   border-radius: 15px;
@@ -131,7 +139,7 @@
     padding: 80px 20px;
   }
   .message{
-    width: 90%;
+    width: 400px;
   }
 }
 
@@ -145,9 +153,13 @@
   .search__addBtn{
     width: 90%;
     gap: 10px;
+    margin-right: 10px;
   }
   video{
     width: 150px;
+  }
+  .message{
+    width: 280px;
   }
 }
 
@@ -155,5 +167,9 @@
   .search__addBtn{
     width: 100%;
     gap: 0;
+  }
+
+  .message{
+    width: 220px;
   }
 }

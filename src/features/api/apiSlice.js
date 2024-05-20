@@ -6,55 +6,62 @@ import { BASE_URL } from "../../utils/constants";
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   credentials: 'include',
-  tagTypes: ['Messages', 'Holidays', 'Documents', 'Users'],
-  prepareHeaders: (headers, {getState}) => {
-    const token = getState().auth.token
-    const accessToken = localStorage.getItem('accessToken');
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState().auth.token;
     if (token) {
-      localStorage.setItem('accessToken', token);
       headers.set("Authorization", `Bearer ${token}`);
-    } else if (accessToken) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
     }
     return headers;
   }
-})
-
+});
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions)
+  let result = await baseQuery(args, api, extraOptions);
 
-  if(result.error && result.error.status === 401) {
-    console.log('Отправка запроса на обновление токена')
+  if (result.error && result.error.status === 401) {
+    console.log('Отправка запроса на обновление токена');
 
-    const refreshResult = await baseQuery('/accounts/refresh/', api, extraOptions)
-    const { refresh: refreshToken } = refreshResult?.data; // Предположим, что токены находятся в свойствах access и refresh объекта данных
-    console.log(refreshResult)
-    if(refreshToken) {
-      localStorage.setItem('refreshToken', refreshToken);
-      
+    const refreshToken = api.getState().auth.refresh;
+    if (!refreshToken) {
+      console.error('Refresh token отсутствует');
+      api.dispatch(logout());
+      return result;
+    }
+
+    const refreshResult = await baseQuery({
+      url: '/accounts/refresh/',
+      method: 'POST',
+      body: { refresh: refreshToken }
+    }, api, extraOptions);
+
+    console.log('refreshResult:', refreshResult);
+
+    const newAccessToken = refreshResult?.data?.access;
+    const newRefreshToken = refreshResult?.data?.refresh;
+    console.log('newAccessToken:', newAccessToken);
+    console.log('newRefreshToken:', newRefreshToken);
+
+    if (newAccessToken && newRefreshToken) {
+      localStorage.setItem('accessToken', newAccessToken);
+      localStorage.setItem('refreshToken', newRefreshToken);
+
       const user = api.getState().auth.user;
-      api.dispatch(setCredentials({ user, refreshToken }));
+      api.dispatch(setCredentials({ user, access: newAccessToken, refresh: newRefreshToken }));
 
       // Повторно выполнить исходный запрос с обновленным токеном доступа
       result = await baseQuery(args, api, extraOptions);
-      console.log(result)
+      console.log('result после обновления токена:', result);
     } else {
-      // Если не удалось получить токены из ответа, разлогинить пользователя
       api.dispatch(logout());
     }
   }
 
   return result;
-}
-
-
-
+};
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({})
-})
-
+});
 
 export const {} = apiSlice;
