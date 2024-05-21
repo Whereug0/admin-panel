@@ -54,22 +54,6 @@ const Documents = () => {
            document.instruction.toLowerCase().includes(searchItem.toLowerCase());
   });
 
-  // const handleCreate = async () => {
-  //   const documentName = prompt("Введите название документа:");
-  //   const instructionText = prompt("Введите инструкцию документа:");
-  //   try {
-  //     const result = await createDocument({name: documentName, instruction: instructionText }); 
-  //     console.log("Сообщение успешно создано:", result.data);
-  //   } catch (error) {
-  //     console.error("Ошибка при создании сообщения:", error);
-  //   }
-  // }
-
-  // const handleUpdate = (holiday) => {
-  //   const documentName = prompt("Введите название документа:");
-  //   const instructionText = prompt("Введите текст документа")
-  //   updateDocument({id: holiday, name: documentName, instruction: instructionText})
-  // }
 
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
@@ -105,7 +89,7 @@ const Documents = () => {
   const handleAdd = () => {
     setIsEditing(false); // Сбрасываем флаг редактирования
     setEditDocumentId(null); // Сбрасываем ID редактируемого документа
-    // Устанавливаем начальные значения пустыми только при добавлении нового документа
+   
     setName('');
     setInstruction('');
     setModalActive(true); // Открываем модальное окно

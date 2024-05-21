@@ -4,4 +4,6 @@ export const ROUTES = {
   DOCUMENTS: '/documents',
   HOLIDAYS: '/holidays',
   USERS: '/users',
+  SURVEYS: '/surveys',
+  SURVEY: '/survey'
 }

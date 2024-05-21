@@ -132,7 +132,8 @@ const Holidays = () => {
   
   const filteredHolidays = holidays
   ? holidays.filter((holiday) =>
-      holiday.text.toLowerCase().includes(searchItem.toLowerCase())
+      holiday.text.toLowerCase().includes(searchItem.toLowerCase()) ||
+      holiday.name.toLowerCase().includes(searchItem.toLowerCase())
     )
   : [];
 

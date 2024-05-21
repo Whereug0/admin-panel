@@ -6,6 +6,7 @@ import { BASE_URL } from "../../utils/constants";
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   credentials: 'include',
+  tagTypes: ['Messages', 'Holidays', 'Documents', 'Users', 'Surveys', 'SurveySingle', 'SurveySingleQuestions', 'Options'],
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {

@@ -77,6 +77,15 @@ const BurgerMenu = (props) => {
               <span className={styles["nav-menu__text"]}>Документы</span>
             </NavLink>
           </li>
+          <li
+            // onClick={handleQuitBurgerMenu}
+            className={styles["nav-menu__item"]}
+          >
+            <NavLink className={styles["nav-menu__link"]} to={ROUTES.SURVEYS}>
+              <DocumentIcon className={styles.icon}/>
+              <span className={styles["nav-menu__text"]}>Опросы</span>
+            </NavLink>
+          </li>
           
         </div>
 

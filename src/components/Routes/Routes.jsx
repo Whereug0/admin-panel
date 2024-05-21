@@ -6,6 +6,8 @@ import Users from '../../pages/Users/Users';
 import Messages from '../../pages/Messages/Messages';
 import Documents from '../../pages/Documents/Documents';
 import Login from '../../pages/Login/Login';
+import Surveys from '../../pages/Surveys/Surveys';
+import Survey from '../../pages/Surveys/Survey/Survey';
 
 const AppRoutes = () => {
   return (
@@ -15,6 +17,8 @@ const AppRoutes = () => {
           <Route path={ROUTES.HOLIDAYS} element={<Holidays />}/>
           <Route path={ROUTES.USERS} element={<Users />}/>
           <Route path={ROUTES.DOCUMENTS} element={<Documents />}/>
+          <Route path={ROUTES.SURVEYS} element={<Surveys />} />
+          <Route path={`${ROUTES.SURVEY}/:id`} element={<Survey />} />
         </Routes>
   )
 }

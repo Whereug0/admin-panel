@@ -1,6 +1,5 @@
 @import '../../assets/styles/colors.scss';
 
-
 .container{
   padding: 100px 50px;
 }
@@ -16,7 +15,9 @@
   gap: 30px;
 }
 
-.documents_list{
+
+
+.surveys_list{
   display: flex;
   flex-direction: column;
   width: 90%;
@@ -24,6 +25,9 @@
   border-radius: 15px;
   // box-shadow: $beeline-color-boxshadow;
   .search_box{
+    display: flex;
+    justify-content: center;
+
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;  
   }
@@ -38,16 +42,19 @@
     padding: 10px;
     border: 1px solid $border;
     & > p{
-      width: 100%;
+      width: 200px;
       padding: 10px;
-      
+    }
+    & > a{
+      width: 200px;
+      padding: 10px;
     }
   }
   .data{
     color: #007bff;
     font-weight: 500;
   }
-  .document{
+  .survey{
     .name{
       width: 100%;
       font-weight: 500;
@@ -55,10 +62,11 @@
   }
 }
 
+
 .Search__wrapp{
-  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
   button{
     padding: 7px;
     color: white;
@@ -68,31 +76,6 @@
       color: black;
       background: $beeline-color;
     }
-  }
-}
-
-.sortSelector{
-  display: flex;
-  align-items: center;
-  select{
-    height: 100%;
-    border: 2px solid $border;
-  }
-}
-
-.buttons{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  button{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3px;
-    border-radius: 5px;
-    color: black;
-    background: $beeline-color;
   }
 }
 
@@ -136,14 +119,14 @@
   gap: 5px;
 }
 
-.instruction__wrapp{
+.description__wrapp{
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 5px;
 }
 
-.successDocument{
+.successSurvey{
   color: green;
 }
 
@@ -152,20 +135,43 @@
   height: 25px;
 }
 
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 5px;
+    color: black;
+    background: $beeline-color;
+  }
+}
+
+select{
+  background: transparent;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 125px;
+  font-size: 15px;
+  option{
+    background: #26272B;
+    color: white;
+  }
+}
+
 @media (max-width: 1200px) {
-  .documents_list{
+  .surveys_list{
     width: 100%;
   }
 }
 
 
-
-
-@media (max-width: 500px) {
-  .instruction{
-    display: none;
-  }
-}
 
 
 @media (max-width: 450px) {
