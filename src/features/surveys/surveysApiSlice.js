@@ -53,7 +53,7 @@ const surveysApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
       invalidatesTags: ['Surveys']
-    })
+    }),
   })
 })
 

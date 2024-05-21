@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Survey.module.scss";
 import Header from "../../../components/Header/Header";
-import { useParams } from "react-router-dom";
-import { useCreateSurveyIdQuestionsMutation, useGetSurveyIdOptionQuery, useGetSurveyIdQuestionsQuery, useGetSurveySingleQuery } from "../../../features/surveys/surveysApiSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCreateSurveyIdQuestionsMutation, useDeleteSurveysMutation, useGetSurveyIdOptionQuery, useGetSurveyIdQuestionsQuery, useGetSurveySingleQuery } from "../../../features/surveys/surveysApiSlice";
 import { useDispatch } from "react-redux";
 import { apiSlice } from "../../../features/api/apiSlice";
 import MyInput from "../../../components/MyInput/MyInput";
+import { ROUTES } from "../../../utils/routes";
 
 const Survey = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+
   const { data: survey, isLoading, error } = useGetSurveySingleQuery(id);
   const { data: questions, isLoading: isLoadingQuestions, error: errorQuestions } = useGetSurveyIdQuestionsQuery(id);
   
   const [createQuestion, { isLoading: isCreating }] = useCreateSurveyIdQuestionsMutation();
-  
+  const [deleteSurvey, {}] = useDeleteSurveysMutation()
+
+
   const [selectedStatus, setSelectedStatus] = useState('-');
   const [selectedTypes, setSelectedTypes] = useState({}); 
   const [options, setOptions] = useState({});
@@ -71,6 +76,14 @@ const Survey = () => {
     }
   };
 
+  const handleRemove = (surveyId) => {
+    const result = window.confirm("Вы точно хотите удалить сообщение?");
+    if (result) {
+      deleteSurvey({ id: surveyId });
+      navigate(ROUTES.SURVEYS)
+    }
+  };
+
   return (
     <>
       <Header />
@@ -78,9 +91,16 @@ const Survey = () => {
         <div className={styles.content}>
           {survey && (
             <div className={styles.survey__wrapp} key={survey.id}>
-              <div className={styles.input_wrapp}>
-                <label htmlFor="title">Название:</label>
-                <textarea id="title" className={styles.title} defaultValue={survey.name}></textarea>
+
+              <div className={`${styles.input_wrapp} ${styles.input_wrapp_title}`}>
+                <div className={styles.title_input}>
+                  <label htmlFor="title">Название:</label>
+                  <textarea id="title" className={styles.title} defaultValue={survey.name}></textarea>
+                </div>
+                <div className={styles.buttons}>
+                  <button onClick={() => handleRemove(survey.id)}>Удалить</button>
+                  <button>Сохранить</button>
+                </div>
               </div>
               <div className={styles.input_wrapp}>
                 <label htmlFor="description">Описание:</label>
@@ -138,7 +158,7 @@ const Survey = () => {
                   <>
                     <label htmlFor={`options-${question.id}`}>Варианты ответов:</label>
                     {options[question.id] && options[question.id].map(option => (
-                      <p key={option.id} id={`option-${option.id}`}>{option.text}</p>
+                      <textarea key={option.id} id={`option-${option.id}`}>{option.text}</textarea>
                     ))}
                   </>
                 )}

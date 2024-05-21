@@ -90,3 +90,28 @@
     color: white;
   }
 }
+
+
+.title_input{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.input_wrapp_title{
+  justify-content: space-between;
+  flex-direction:unset;
+  .buttons{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    button{
+      width: 100%;
+      border-radius: 8px;
+      padding: 5px;
+      background-color: $beeline-color;
+    }
+  }
+}

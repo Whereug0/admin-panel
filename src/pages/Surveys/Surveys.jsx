@@ -24,18 +24,15 @@ const Surveys = () => {
   const [descriptionText, setDescriptionText] = useState("");
   const [successSurvey, setSuccessSurvey] = useState("");
   const [name, setName] = useState("");
-  const [dateTime, setDateTime] = useState(null);
+  const [dateTime, setDateTime] = useState("");
   const [status, setStatus] = useState(true);
   const [editSurveyId, setEditSurveyId] = useState(null);
-
   const [isEditing, setIsEditing] = useState(false);
 
   const { data: surveys, isLoading, error } = useGetSurveysQuery();
-  const [updateSurvey, {}] = useUpdateSurveysMutation();
-  const [deleteSurvey, {}] = useDeleteSurveysMutation();
-  const [createSurvey, {}] = useCreateSurveysMutation();
-
-  console.log(surveys);
+  const [updateSurvey] = useUpdateSurveysMutation();
+  const [deleteSurvey] = useDeleteSurveysMutation();
+  const [createSurvey] = useCreateSurveysMutation();
 
   useEffect(() => {
     dispatch(apiSlice.endpoints.getSurveys.initiate());
@@ -45,82 +42,73 @@ const Surveys = () => {
     return <div>Loading...</div>;
   }
   if (error) {
-    return <div>Error: {error.surveys}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   const handleCreateOrUpdate = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", descriptionText);
-    formData.append("start_datetime", dateTime);
-    formData.append("active", status);
+    const formattedDateTime = formatDateTime(dateTime);
+    const formData = {
+      name,
+      description: descriptionText,
+      start_datetime: formattedDateTime,
+      active: status,
+    };
 
     try {
       if (isEditing) {
-        await updateSurvey({
-          id: editSurveyId,
-          name: name,
-          description: descriptionText,
-          active: status,
-        });
+        await updateSurvey({ id: editSurveyId, ...formData });
       } else {
         await createSurvey(formData);
       }
-      // Очистка состояний после успешного создания/обновления сообщения
       setSuccessSurvey(
-        isEditing
-          ? "Сообщение успешно обновлено!"
-          : "Сообщение успешно создано!"
+        isEditing ? "Опрос успешно обновлен!" : "Опрос успешно создан!"
       );
       setName("");
+      setDescriptionText("");
+      setDateTime("");
+      setStatus(true);
       setIsEditing(false);
       setTimeout(() => {
         setModalActive(false);
         setSuccessSurvey("");
       }, 1000);
     } catch (error) {
-      console.error("Ошибка при создании/обновлении сообщения:", error);
-      console.log("Дополнительная информация об ошибке:", error.response.data);
+      console.error("Ошибка при создании/обновлении опроса:", error);
     }
   };
 
   const handleAdd = () => {
-    setIsEditing(false); // Сбрасываем флаг редактирования
-    setEditSurveyId(null); // Сбрасываем ID редактируемого документа
-
+    setIsEditing(false);
+    setEditSurveyId(null);
     setName("");
     setDescriptionText("");
-    setModalActive(true); // Открываем модальное окно
+    setDateTime("");
+    setStatus(true);
+    setModalActive(true);
   };
-
-  // const handleEdit = (survey) => {
-  //   setEditSurveyId(survey.id);
-  //   setName(survey.name);
-  //   setDescriptionText(survey.description);
-  //   setIsEditing(true);
-  //   setModalActive(true);
-  // };
-
-  // const handleRemove = (survey, e) => {
-  //   const result = window.confirm("Вы точно хотите удалить опрос?");
-  //   if (result) {
-  //     deleteSurvey({ id: survey });
-  //   } else {
-  //   }
-  // };
 
   const handleSearch = (e) => {
     setSearchItem(e.target.value);
   };
 
-  // Функция для фильтрации пользователей по имени и статусу
-  const filteredSurveys = surveys.filter((survey) => {
-    return (
-      survey.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-      survey.description.toLowerCase().includes(searchItem.toLowerCase())
-    );
-  });
+  const filteredSurveys = surveys.filter((survey) =>
+    survey.name.toLowerCase().includes(searchItem.toLowerCase()) ||
+    survey.description.toLowerCase().includes(searchItem.toLowerCase())
+  );
+
+  const formatDateTime = (dateTime) => {
+    const [date, time] = dateTime.split(' ');
+    const [day, month, year] = date.split('.');
+    const formattedDate = `${year}-${month}-${day}`;
+    const timeZoneOffset = new Date().getTimezoneOffset();
+    const offsetSign = timeZoneOffset > 0 ? '-' : '+';
+    const offsetHours = String(Math.abs(Math.floor(timeZoneOffset / 60))).padStart(2, '0');
+    const offsetMinutes = String(Math.abs(timeZoneOffset % 60)).padStart(2, '0');
+    const formattedTimeZoneOffset = `${offsetSign}${offsetHours}:${offsetMinutes}`;
+    return `${formattedDate}T${time}${formattedTimeZoneOffset}`;
+  };
+
   return (
     <>
       <Header />
@@ -143,14 +131,6 @@ const Surveys = () => {
             {surveys &&
               filteredSurveys.map((survey) => (
                 <div className={styles.survey} key={survey.id}>
-                  {/* <div className={styles.buttons}>
-                    <button onClick={() => handleRemove(survey.id)}>
-                        <DeleteIcon />
-                      </button>
-                      <button onClick={() => handleEdit(survey)}>
-                        <EditIcon className={styles.icon} />
-                      </button>
-                  </div> */}
                   <NavLink
                     to={`${ROUTES.SURVEY}/${survey.id}`}
                     className={styles.links}
@@ -159,7 +139,7 @@ const Surveys = () => {
                   </NavLink>
                   <p>{survey.target_users}</p>
                   <p>{survey.start_datetime}</p>
-                  <p>{survey.active === true ? "Активный" : "Неактивный"}</p>
+                  <p>{survey.active ? "Активный" : "Неактивный"}</p>
                 </div>
               ))}
           </div>
@@ -191,8 +171,12 @@ const Surveys = () => {
           </div>
           <div className={styles.name__wrapp}>
             <label htmlFor="status">Статус:</label>
-            <select name="status" id="status">
-              <option value="">-</option>
+            <select
+              name="status"
+              id="status"
+              value={status ? "true" : "false"}
+              onChange={(e) => setStatus(e.target.value === "true")}
+            >
               <option value="true">Активный</option>
               <option value="false">Неактивный</option>
             </select>
