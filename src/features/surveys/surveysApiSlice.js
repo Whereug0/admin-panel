@@ -11,11 +11,11 @@ const surveysApiSlice = apiSlice.injectEndpoints({
       providesTags: result => ['Surveys']
     }),
     getSurveySingle: builder.query({
-      query: (id) => `/main/survey/${id}`,
+      query: (id) => `/main/survey/${id}/`,
       providesTags: result => ['SurveySingle']
     }),
     getSurveyIdQuestions: builder.query({
-      query: (id) => `/main/survey/${id}/questions`,
+      query: (id) => `/main/survey/${id}/questions/`,
       providesTags: result => ['SurveySingleQuestions']
     }),
     getSurveyIdOption: builder.query({
@@ -25,7 +25,7 @@ const surveysApiSlice = apiSlice.injectEndpoints({
 
     createSurveyIdQuestions: builder.mutation({
       query: (questionData) => ({
-        url: `/main/survey/${questionData.surveyId}/questions`,
+        url: `/main/survey/${questionData.surveyId}/questions/`,
         method: 'POST',
         body: questionData,
       }),
